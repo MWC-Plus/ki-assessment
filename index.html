@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KI-Reifegradmodell 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f7f7f5;
+    --bg-tertiary: #f0efe9;
+    --text-primary: #1a1a18;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --border: rgba(0,0,0,0.12);
+    --border-md: rgba(0,0,0,0.22);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --accent: #3266ad;
+    --accent-dark: #285a99;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a;
+      --bg-secondary: #252523;
+      --bg-tertiary: #2e2e2b;
+      --text-primary: #e8e7e0;
+      --text-secondary: #a8a79f;
+      --text-tertiary: #6e6d68;
+      --border: rgba(255,255,255,0.1);
+      --border-md: rgba(255,255,255,0.2);
+      --accent: #5a8fd4;
+      --accent-dark: #4a7fc4;
+    }
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .app {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--bg);
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border);
+    padding: 2rem;
+  }
+
+  .app-header { margin-bottom: 2rem; }
+  .app-header h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .app-header p { font-size: 14px; color: var(--text-secondary); }
+
+  .progress-bar { width: 100%; height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+
+  .step-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 1.5rem; }
+
+  .section-card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .question { margin-bottom: 1.75rem; }
+  .question:last-child { margin-bottom: 0; }
+  .question-text { font-size: 15px; color: var(--text-primary); margin-bottom: 0.85rem; line-height: 1.55; }
+  .question-num { font-size: 12px; color: var(--text-tertiary); margin-right: 5px; }
+
+  .rating-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+  .rating-btn {
+    width: 42px;
+    height: 38px;
+    border: 0.5px solid var(--border-md);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font);
+  }
+  .rating-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+  .rating-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .rating-btn.wn { font-size: 11px; width: auto; padding: 0 12px; }
+
+  .scale-hint {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 7px;
+    display: flex;
+    justify-content: space-between;
+    max-width: 230px;
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .btn {
+    padding: 9px 22px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 0.5px solid var(--border-md);
+    background: var(--bg);
+    color: var(--text-primary);
+    transition: all 0.15s;
+    font-family: var(--font);
+  }
+  .btn:hover { background: var(--bg-secondary); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-dark); }
+
+  .comp-badge { font-size: 12px; color: var(--text-secondary); }
+  .comp-badge strong { color: var(--accent); }
+
+  /* Results */
+  #results { display: none; }
+
+  .result-header { margin-bottom: 2rem; }
+  .result-header h2 { font-size: 22px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .result-header p { font-size: 14px; color: var(--text-secondary); }
+
+  .stage-card {
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .stage-circle {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .stage-info h3 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+  .stage-info p { font-size: 14px; color: var(--text-secondary); }
+  .stage-total { font-size: 30px; font-weight: 600; color: var(--accent); margin-left: auto; flex-shrink: 0; }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 500px) { .metrics-grid { grid-template-columns: repeat(2, 1fr); } }
+  .metric-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+  }
+  .metric-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+  .metric-value { font-size: 22px; font-weight: 600; color: var(--text-primary); }
+
+  .section-heading { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 1rem; }
+
+  .dim-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+  .dim-row {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+  }
+  .dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .dim-name { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .dim-badge { font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: var(--radius-md); }
+  .dim-bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .dim-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+
+  .chart-wrap { position: relative; width: 100%; height: 340px; margin-bottom: 1.5rem; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .oe-block {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  .oe-block-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 0.6rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    display: inline-block;
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding: 3px 9px;
+  }
+
+  .wn-note {
+    background: var(--bg-secondary);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 0.85rem 1rem;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- QUESTIONNAIRE -->
+  <div id="questionnaire">
+    <div class="app-header">
+      <h1>KI-Reifegradmodell 2026</h1>
+      <p>Bestimmen Sie den KI-Reifegrad Ihrer Organisation entlang 7 Dimensionen (28 Fragen)</p>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:14%"></div></div>
+    <div class="step-label" id="step-label">Dimension 1 von 7</div>
+
+    <div id="sections-container"></div>
+
+    <div class="nav-row">
+      <button class="btn" id="btn-prev" onclick="navigate(-1)" disabled>← Zurück</button>
+      <div class="comp-badge" id="comp-badge"></div>
+      <button class="btn btn-primary" id="btn-next" onclick="navigate(1)">Weiter →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="result-header">
+      <h2>Ihr KI-Reifegrad</h2>
+      <p>Auswertung Ihrer Selbsteinschätzung – 7 Dimensionen, 28 Items</p>
+    </div>
+    <div id="results-content"></div>
+    <button class="btn" onclick="restart()" style="margin-top:1.5rem">↺ Neu starten</button>
+  </div>
+
+</div>
+
+<script>
+const dimensions = [
+  {
+    id:'A', name:'Strategie & Business Value',
+    oe:['Zielbild-Entwicklung','OKR/KPI-Systeme','Portfolio-Governance','Investment-Gremien','Strategy Deployment','Value Tracking'],
+    questions:[
+      'Es gibt eine dokumentierte KI-Vision mit klarer Verbindung zu Unternehmenszielen.',
+      'KI-Investitionen folgen einer priorisierten Roadmap (nicht nur Einzelfall-Entscheide).',
+      'Für Top-Use-Cases existieren Business Cases (Kosten, Nutzen, Risiken, Abhängigkeiten).',
+      'KI-Ziele werden über messbare Outcomes gesteuert (z.B. Durchlaufzeit, Qualität, Umsatz).'
+    ]
+  },
+  {
+    id:'B', name:'Use-Case Portfolio & Produktisierung',
+    oe:['Produktdenken (AI Product Ownership)','Intake-Prozesse','Definition of Done','Build-Run-Übergaben','Portfolio-Management','Value Realization'],
+    questions:[
+      'Es gibt einen End-to-End Prozess von Idee → Scoping → Build → Run (inkl. Übergabe/Betrieb).',
+      'Mindestens ein relevanter KI-Use-Case ist stabil produktiv und in Kernprozesse integriert.',
+      'Wir haben ein Use-Case Portfolio (Klassifikation, Wiederverwendung, Abhängigkeiten).',
+      'Wertbeitrag produktiver KI wird regelmäßig gemessen und in Entscheidungen genutzt.'
+    ]
+  },
+  {
+    id:'C', name:'Daten, Architektur & Plattform',
+    oe:['Data Ownership (Data Product Owner)','Plattform-Operating Model','MLOps/LLMOps-Standards','FinOps/Cost Governance','API-Integration','Wiederverwendungsbibliotheken'],
+    questions:[
+      'Es existiert ein verlässliches Datenfundament (Zugriff, Qualität, Ownership).',
+      'Datenqualität wird systematisch gemessen und Verantwortlichkeiten sind klar.',
+      'Es gibt eine Plattformfähigkeit für KI (Deployment, Monitoring, Logging, Registry o.ä.).',
+      'Für GenAI/LLM gibt es Standards (Prompting, RAG/Knowledge, Evaluierung, Kostenkontrolle).',
+      'KI-Lösungen sind über APIs/Integration sauber in Systeme & Prozesse eingebettet.'
+    ]
+  },
+  {
+    id:'D', name:'Operating Model & Organisation',
+    oe:['Rollen-/RACI-Klärung','Center of Excellence vs. föderiertes Modell','Entscheidungsrechte','Team-Topologien','Gremienlandkarte','Capability Map'],
+    questions:[
+      'Rollen sind definiert (z.B. AI Product Owner, Data/ML/LLM Engineer, Risk/Compliance, Domain Leads).',
+      'Verantwortlichkeiten (Build/Run, Daten, Modelle, Prompt-Assets) sind eindeutig.',
+      'Es gibt ein funktionierendes Zusammenspiel Fachbereich–IT–Risk–Legal (Entscheidungswege).',
+      'Es existiert ein Skalierungsmechanismus (z.B. CoE, Community, Enablement, Blueprints).'
+    ]
+  },
+  {
+    id:'E', name:'Governance, Risiko & Compliance',
+    oe:['Risk-Operating-Model','KI-Policy-Set','Risk-Assessment-Templates','Freigabeprozesse','Kontrollpunkte in Delivery','Logging/Controls','Incident Response'],
+    questions:[
+      'Es gibt Policies für KI-Nutzung (Datenschutz, IP, Security, Third-Party Tools, GenAI).',
+      'Risiken (Bias, Halluzinationen, Erklärbarkeit, Missbrauch) werden vor Go-Live bewertet.',
+      'Es gibt Freigabe-/Kontrollpunkte (z.B. Modellreview, Promptreview, Monitoring, Incident-Prozess).',
+      'Verantwortung & Eskalation (Owner, Gremien, Auditfähigkeit) sind klar geregelt.'
+    ]
+  },
+  {
+    id:'F', name:'People, Skills & Enablement',
+    oe:['Qualifizierungskonzepte','Karrierepfade','Communities of Practice','Führungskräfteentwicklung','Rollenprofile','Champions-Netzwerke','Lernpfade'],
+    questions:[
+      'Führungskräfte besitzen ausreichende AI Literacy, um Prioritäten & Risiken zu steuern.',
+      'Mitarbeitende werden befähigt (Training, Guidelines, Tooling) KI sicher zu nutzen.',
+      'Kritische Rollen sind besetzt oder geplant (Hiring/Partners, Kapazitäten, Karrierepfade).',
+      'Wissen wird skaliert (Playbooks, interne Beratung, Lernpfade, Champions-Netzwerk).'
+    ]
+  },
+  {
+    id:'G', name:'Kultur & Change',
+    oe:['Change Story','Beteiligungsformate','Kommunikationspläne','Umgang mit Rollenangst','Feedback-Loops','Erfolgsgeschichten','Psychologische Sicherheit'],
+    questions:[
+      'KI-Einführung wird aktiv begleitet (Kommunikation, Beteiligung, Feedback-Loops).',
+      'Auswirkungen auf Rollen/Arbeit werden transparent adressiert (inkl. Mitbestimmung, wo relevant).',
+      'Lernen/Experimentieren ist erwünscht, aber mit Leitplanken (sicherer Raum + Standards).'
+    ]
+  }
+];
+
+const stages = [
+  { min:1.0, max:1.9, level:1, name:'Awareness',     sub:'Ad hoc',      color:'#e24b4a' },
+  { min:2.0, max:2.6, level:2, name:'Experiment',    sub:'Pilots',      color:'#ef9f27' },
+  { min:2.7, max:3.4, level:3, name:'Industrialize', sub:'Defined',     color:'#3266ad' },
+  { min:3.5, max:4.2, level:4, name:'Scale',         sub:'Enterprise',  color:'#1d9e75' },
+  { min:4.3, max:5.0, level:5, name:'AI-Native',     sub:'Optimized',   color:'#534ab7' }
+];
+
+let answers = {};
+let currentDim = 0;
+let radarChart = null;
+
+function key(d,q){ return d+'_'+q; }
+
+function renderSection(di) {
+  const d = dimensions[di];
+  let qOffset = dimensions.slice(0,di).reduce((s,x)=>s+x.questions.length,0);
+  let html = `<div class="section-card"><div class="section-title">${d.id}) ${d.name}</div>`;
+  d.questions.forEach((q,qi)=>{
+    const k = key(di,qi);
+    const v = answers[k];
+    qOffset++;
+    html += `<div class="question">
+      <div class="question-text"><span class="question-num">${qOffset}.</span>${q}</div>
+      <div class="rating-row">
+        ${[1,2,3,4,5].map(n=>`<button class="rating-btn${v===n?' active':''}" onclick="setAnswer(${di},${qi},${n})">${n}</button>`).join('')}
+        <button class="rating-btn wn${v==='W'?' active':''}" onclick="setAnswer(${di},${qi},'W')">Weiß nicht</button>
+      </div>
+      <div class="scale-hint"><span>trifft gar nicht zu</span><span>trifft voll zu</span></div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function updateUI() {
+  document.getElementById('sections-container').innerHTML = renderSection(currentDim);
+  document.getElementById('progress').style.width = ((currentDim+1)/7*100)+'%';
+  document.getElementById('step-label').textContent = `Dimension ${currentDim+1} von 7`;
+  document.getElementById('btn-prev').disabled = currentDim===0;
+  const d = dimensions[currentDim];
+  const answered = d.questions.filter((_,qi)=>answers[key(currentDim,qi)]!==undefined).length;
+  document.getElementById('comp-badge').innerHTML = `<strong>${answered}</strong>/${d.questions.length} beantwortet`;
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.textContent = currentDim===6 ? 'Auswerten ✓' : 'Weiter →';
+}
+
+function setAnswer(di,qi,val){
+  answers[key(di,qi)]=val;
+  updateUI();
+}
+
+function navigate(dir){
+  if(dir===1 && currentDim===6){ showResults(); return; }
+  currentDim = Math.max(0,Math.min(6,currentDim+dir));
+  updateUI();
+  window.scrollTo(0,0);
+}
+
+function dimScore(di){
+  const d = dimensions[di];
+  const vals = d.questions.map((_,qi)=>answers[key(di,qi)]).filter(v=>v!==undefined&&v!=='W');
+  return vals.length ? vals.reduce((s,v)=>s+v,0)/vals.length : null;
+}
+
+function getStage(score){
+  return stages.find(s=>score>=s.min&&score<=s.max)||stages[4];
+}
+
+function barColor(score){
+  if(score>=4.3) return '#534ab7';
+  if(score>=3.5) return '#1d9e75';
+  if(score>=2.7) return '#3266ad';
+  if(score>=2.0) return '#ef9f27';
+  return '#e24b4a';
+}
+
+function showResults(){
+  document.getElementById('questionnaire').style.display='none';
+  document.getElementById('results').style.display='block';
+
+  const scores = dimensions.map((_,i)=>dimScore(i));
+  const valid = scores.filter(s=>s!==null);
+  const total = valid.length ? valid.reduce((a,b)=>a+b,0)/valid.length : 0;
+  const stage = getStage(total);
+  const totalAns = Object.values(answers).filter(v=>v!=='W').length;
+  const totalWN  = Object.values(answers).filter(v=>v==='W').length;
+
+  let html = `
+  <div class="stage-card">
+    <div class="stage-circle">${stage.level}</div>
+    <div class="stage-info">
+      <h3>Stufe ${stage.level}: ${stage.name}</h3>
+      <p>${stage.sub} · Gesamtscore: ${total.toFixed(2)} / 5,00</p>
+    </div>
+    <div class="stage-total">${total.toFixed(1)}</div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card"><div class="metric-label">Gesamtscore</div><div class="metric-value">${total.toFixed(2)}</div></div>
+    <div class="metric-card"><div class="metric-label">Reifegrad</div><div class="metric-value">Stufe ${stage.level}</div></div>
+    <div class="metric-card"><div class="metric-label">Beantwortet</div><div class="metric-value">${totalAns}</div></div>
+    <div class="metric-card"><div class="metric-label">Weiß nicht</div><div class="metric-value">${totalWN}</div></div>
+  </div>`;
+
+  if(totalWN>3){
+    html += `<div class="wn-note">Hinweis: Sie haben ${totalWN} Fragen mit „Weiß nicht" beantwortet. Das deutet auf mögliche Transparenz- oder Kommunikationslücken in Ihrer Organisation hin – ein wertvoller Befund für sich.</div>`;
+  }
+
+  html += `<p class="section-heading">Scores nach Dimension</p>
+  <div class="legend">
+    ${stages.map(s=>`<span class="legend-item"><span class="legend-dot" style="background:${s.color}"></span>Stufe ${s.level}: ${s.name}</span>`).join('')}
+  </div>
+  <div class="dim-list">`;
+
+  dimensions.forEach((d,i)=>{
+    const sc = scores[i];
+    const str = sc!==null ? sc.toFixed(2) : 'n/a';
+    const pct = sc!==null ? ((sc-1)/4*100) : 0;
+    const col = sc!==null ? barColor(sc) : '#888';
+    const st  = sc!==null ? getStage(sc) : null;
+    html += `<div class="dim-row">
+      <div class="dim-header">
+        <div class="dim-name">${d.id}) ${d.name}</div>
+        <span class="dim-badge" style="background:${col}22;color:${col}">${str}${st?' · Stufe '+st.level:''}</span>
+      </div>
+      <div class="dim-bar-bg"><div class="dim-bar-fill" style="width:${pct}%;background:${col}"></div></div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<p class="section-heading">Spinnendiagramm</p>
+  <div class="chart-wrap"><canvas id="radarChart"></canvas></div>`;
+
+  const low = dimensions.map((d,i)=>({d,i,sc:scores[i]}))
+    .filter(x=>x.sc!==null&&x.sc<3.5)
+    .sort((a,b)=>a.sc-b.sc)
+    .slice(0,3);
+
+  if(low.length){
+    html += `<p class="section-heading">Empfohlene OE-Maßnahmen (schwächste Dimensionen)</p>`;
+    low.forEach(({d,sc})=>{
+      html += `<div class="oe-block">
+        <div class="oe-block-title">${d.name} <span style="font-weight:400;color:var(--text-secondary)">— Score: ${sc.toFixed(2)}</span></div>
+        <div class="tags">${d.oe.map(h=>`<span class="tag">${h}</span>`).join('')}</div>
+      </div>`;
+    });
+  } else {
+    html += `<div class="oe-block"><div class="oe-block-title">Alle Dimensionen auf gutem Niveau</div>
+      <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">Ihre Scores liegen durchgehend im oberen Bereich. Nutzen Sie die OE-Hebel gezielt, um den nächsten Reifegrad zu konsolidieren.</p></div>`;
+  }
+
+  document.getElementById('results-content').innerHTML = html;
+
+  setTimeout(()=>{
+    if(radarChart) radarChart.destroy();
+    const labels = dimensions.map(d=>d.name.length>22?d.name.substring(0,20)+'…':d.name);
+    const data = scores.map(s=>s!==null?parseFloat(s.toFixed(2)):0);
+    radarChart = new Chart(document.getElementById('radarChart'),{
+      type:'radar',
+      data:{
+        labels,
+        datasets:[{
+          label:'Ihr Score',
+          data,
+          backgroundColor:'rgba(50,102,173,0.12)',
+          borderColor:'#3266ad',
+          borderWidth:2,
+          pointBackgroundColor:'#3266ad',
+          pointRadius:5,
+          pointHoverRadius:7
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        scales:{r:{min:0,max:5,ticks:{stepSize:1,font:{size:11},color:'#888'},pointLabels:{font:{size:11}},grid:{color:'rgba(128,128,128,0.18)'},angleLines:{color:'rgba(128,128,128,0.18)'}}},
+        plugins:{legend:{display:false}}
+      }
+    });
+  },120);
+
+  window.scrollTo(0,0);
+}
+
+function restart(){
+  answers={};
+  currentDim=0;
+  document.getElementById('questionnaire').style.display='block';
+  document.getElementById('results').style.display='none';
+  updateUI();
+  window.scrollTo(0,0);
+}
+
+updateUI();
+</script>
+</body>
+</html>
