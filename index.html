@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KI-Reifegradanalyse | kick consulting | v1.4</title>
+<title>KI-Reifegradanalyse | kick consulting | v1.5</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -127,7 +127,7 @@ body{font-family:var(--font);background:var(--bg-tertiary);color:var(--text-prim
 </style>
 </head>
 <body>
-<div class="version">v1.4</div>
+<div class="version">v1.5</div>
 <div class="app">
   <!-- WELCOME -->
   <div id="screen-welcome" class="screen active">
@@ -142,7 +142,7 @@ body{font-family:var(--font);background:var(--bg-tertiary);color:var(--text-prim
         <div class="welcome-info-item"><div class="welcome-info-num">~10</div><div class="welcome-info-label">Minuten</div></div>
       </div>
       <button class="btn btn-primary" onclick="showScreen('screen-privacy')" style="padding:12px 36px;font-size:15px;">Weiter &#x2192;</button>
-      <p style="font-size:11px;color:var(--text-tertiary);margin-top:1.5rem;">Version 1.4</p>
+      <p style="font-size:11px;color:var(--text-tertiary);margin-top:1.5rem;">Version 1.5</p>
     </div>
   </div>
 
@@ -170,7 +170,7 @@ body{font-family:var(--font);background:var(--bg-tertiary);color:var(--text-prim
       <div class="privacy-responsible">
         <strong>kick consulting GmbH</strong><br>
         K&#xE4;rntener Stra&#xDF;e 20, 10827 Berlin<br>
-        E-Mail: <strong>info@kick-consulting.com</strong><br><br>
+        E-Mail: <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5a33343c351a3133393177393534292f362e33343d74393537">[email&#160;protected]</a></strong><br><br>
         Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)
       </div>
     </div>
@@ -267,7 +267,7 @@ body{font-family:var(--font);background:var(--bg-tertiary);color:var(--text-prim
   </div>
 
 </div>
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
   const firebaseConfig = {
@@ -419,7 +419,7 @@ function dimScore(di) {
   return vals.length ? vals.reduce(function(s, v) { return s + v; }, 0) / vals.length : null;
 }
 
-function getStage(score) { return stages.find(function(s) { return score >= s.min && score <= s.max; }) || stages[4]; }
+function getStage(score) { if (!score || score <= 0) return stages[0]; return stages.find(function(s) { return score >= s.min && score <= s.max; }) || stages[0]; }
 function barColor(score) { if (score >= 4.3) return '#534ab7'; if (score >= 3.5) return '#1d9e75'; if (score >= 2.7) return '#3266ad'; if (score >= 2.0) return '#ef9f27'; return '#e24b4a'; }
 
 async function submitAnswers() {
@@ -441,7 +441,7 @@ function showMyResults() {
   const scores = myScores;
   const valid = scores.filter(function(s) { return s !== null; });
   const total = valid.length ? valid.reduce(function(a, b) { return a + b; }, 0) / valid.length : 0;
-  const stage = getStage(total);
+  const stage = total > 0 ? getStage(total) : stages[0];
   const totalAns = Object.values(answers).filter(function(v) { return v !== 'W'; }).length;
   const totalWN = Object.values(answers).filter(function(v) { return v === 'W'; }).length;
 
@@ -508,11 +508,4 @@ function switchTab(tabId) {
   if (tabId === 'tab-radar' && dashChart) dashChart.resize();
 }
 
-function restart() { answers = {}; currentDim = 0; myScores = null; showScreen('screen-welcome'); }
-
-window.addEventListener('load', function() {
-  if (location.hash === '#dashboard') { showScreen('screen-dashboard'); loadDashboard(); }
-});
-</script>
-</body>
-</html>
+function restart() { answers = {
