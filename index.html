@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KI-Reifegradanalyse | kick consulting | v1.3</title>
+<title>KI-Reifegradanalyse | kick consulting | v1.4</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -127,22 +127,22 @@ body{font-family:var(--font);background:var(--bg-tertiary);color:var(--text-prim
 </style>
 </head>
 <body>
-<div class="version">v1.3</div>
+<div class="version">v1.4</div>
 <div class="app">
   <!-- WELCOME -->
   <div id="screen-welcome" class="screen active">
     <div class="welcome-box">
       <img class="welcome-logo" id="logo-welcome" alt="kick consulting">
       <div class="welcome-divider"></div>
-      <h1>Willkommen zur KI-Reifegradanalyse<br>der kick consulting GmbH</h1>
-      <p>Dieser Fragebogen hilft Ihnen, den aktuellen KI-Reifegrad Ihrer Organisation zu bestimmen und konkrete Handlungsfelder zu identifizieren.</p>
+      <h1>KI-Navigationsmodell<br>der kick consulting GmbH</h1>
+      <p>Strukturierter Fragebogen zur Bestimmung des Standortes auf Ihrer KI-Reise</p>
       <div class="welcome-info">
         <div class="welcome-info-item"><div class="welcome-info-num">5</div><div class="welcome-info-label">Dimensionen</div></div>
         <div class="welcome-info-item"><div class="welcome-info-num">25</div><div class="welcome-info-label">Fragen</div></div>
         <div class="welcome-info-item"><div class="welcome-info-num">~10</div><div class="welcome-info-label">Minuten</div></div>
       </div>
       <button class="btn btn-primary" onclick="showScreen('screen-privacy')" style="padding:12px 36px;font-size:15px;">Weiter &#x2192;</button>
-      <p style="font-size:11px;color:var(--text-tertiary);margin-top:1.5rem;">Version 1.3</p>
+      <p style="font-size:11px;color:var(--text-tertiary);margin-top:1.5rem;">Version 1.4</p>
     </div>
   </div>
 
@@ -189,7 +189,7 @@ body{font-family:var(--font);background:var(--bg-tertiary);color:var(--text-prim
     <div class="app-header">
       <div class="app-header-top">
         <div>
-          <h1>KI-Reifegradanalyse</h1>
+          <h1>KI-Navigationsmodell</h1>
           <p>Bewerten Sie jede Aussage: 1 = trifft nicht zu &nbsp;|&nbsp; 5 = trifft voll zu</p>
         </div>
         <img class="header-logo" id="logo-header" alt="kick consulting">
@@ -294,51 +294,51 @@ const ADMIN_PW = 'Kick2026#Reset!';
 
 const dimensions = [
   {id:'A', name:'Strategie & Orientierung',
-   desc:'Strategische Ausrichtung, KI-Vision, Governance und ethische Leitplanken Ihrer Organisation.',
+   desc:'In diesem Abschnitt werden die strategische Ausrichtung und die Orientierung Ihrer Organisation im Hinblick auf KI bewertet. Es geht darum, ob eine klare Vision, strategische Zielsetzungen sowie Prioritäten definiert sind und ob ethische Leitplanken festgelegt wurden.',
    oe:['KI-Strategie entwickeln','Governance-Strukturen aufbauen','Ethische Leitplanken definieren','Business Value messen','Priorisierung & Steuerung'],
    questions:[
-     'Es gibt eine klare KI-Strategie mit Bezug zum Gesch\u00e4ftsmodell.',
-     'KI-Initiativen werden priorisiert und gesteuert (kein Wildwuchs).',
-     'Governance-Strukturen f\u00fcr KI sind definiert.',
+     'Es gibt eine klare KI-Strategie mit Bezug zum Geschäftsmodell.',
+     'KI-Initiativen werden priorisiert und gesteuert.',
+     'Governance-Strukturen für KI sind definiert.',
      'Ethische Leitplanken und Compliance sind etabliert.',
      'Business Value von KI wird systematisch gemessen.'
    ]},
-  {id:'B', name:'F\u00fchrung & Verantwortung',
-   desc:'Verst\u00e4ndnis und Verantwortungs\u00fcbernahme durch F\u00fchrungskr\u00e4fte im Kontext von KI.',
-   oe:['AI Literacy f\u00fcr F\u00fchrungskr\u00e4fte','Verantwortlichkeiten kl\u00e4ren','KI-Nutzung vorleben','Entscheidungsunterst\u00fctzung durch KI','Dom\u00e4nen-Ownership'],
+  {id:'B', name:'Führung & Verantwortung',
+   desc:'Dieser Bereich fokussiert sich auf das Verständnis und die Verantwortungsübernahme durch Führungskräfte im Kontext von KI. Bewertet wird, inwiefern die Führung die Potenziale und Risiken von KI erkennt, den Einsatz aktiv vorantreibt, Verantwortlichkeiten klar geregelt sind und KI zur Entscheidungsunterstützung genutzt wird.',
+   oe:['AI Literacy für Führungskräfte','Verantwortlichkeiten klären','KI-Nutzung vorleben','Entscheidungsunterstützung durch KI','Domänen-Ownership'],
    questions:[
      'Top-Management versteht KI als strategisches Thema.',
-     'Bereichsleitungen treiben KI in ihren Dom\u00e4nen aktiv.',
-     'Teamleads integrieren KI in die t\u00e4gliche Arbeit.',
+     'Bereichsleitungen treiben KI in ihren Domänen aktiv.',
+     'Teamleads integrieren KI in die tägliche Arbeit.',
      'Verantwortlichkeiten zwischen Mensch und KI sind klar.',
-     'F\u00fchrungskr\u00e4fte nutzen KI aktiv selbst.'
+     'Führungskräfte nutzen KI aktiv selbst.'
    ]},
-  {id:'C', name:'Lern- & Experimentierkultur',
-   desc:'Lern- und Innovationskultur, Experimentierr\u00e4ume und Wissenstransfer rund um KI.',
-   oe:['Strukturierte Lernangebote','Experimentierr\u00e4ume schaffen','Kompetenzaufbau systematisieren','Communities of Practice','AI Champions Netzwerk'],
+  {id:'C', name:'Lern- und Experimentierkultur',
+   desc:'In diesem Abschnitt wird die Lern- und Innovationskultur Ihrer Organisation im Bezug auf KI betrachtet. Hierzu zählen die Möglichkeiten für Mitarbeitende, mit KI zu experimentieren, Lernangebote, die Entwicklung eigener Ideen für Use Cases sowie der organisationsweite Wissenstransfer.',
+   oe:['Strukturierte Lernangebote','Experimentierräume schaffen','Kompetenzaufbau systematisieren','Communities of Practice','AI Champions Netzwerk'],
    questions:[
-     'Es gibt strukturierte Lernangebote f\u00fcr KI.',
-     'Mitarbeitende k\u00f6nnen im Arbeitskontext experimentieren.',
+     'Es gibt strukturierte Lernangebote für KI.',
+     'Mitarbeitende können im Arbeitskontext experimentieren.',
      'KI-Kompetenzen werden systematisch aufgebaut.',
      'Es existieren Communities oder Austauschformate.',
-     'Multiplikatoren (z.B. AI Champions) sind etabliert.'
+     'Multiplikatoren (z. B. KI Champions) sind etabliert.'
    ]},
   {id:'D', name:'Organisation & Zusammenarbeit',
-   desc:'Rollen, Entscheidungswege und Zusammenarbeit zwischen Fachbereichen, IT und Governance.',
+   desc:'Dieser Bereich bewertet die Struktur und die Zusammenarbeit innerhalb der Organisation im Rahmen von KI-Projekten. Untersucht werden die Definition von Rollen, die Zusammenarbeit zwischen Fachbereichen, IT und Governance, die Entscheidungswege sowie Mechanismen zur Skalierung erfolgreicher Use Cases.',
    oe:['Zentrale Steuerungsrolle definieren','End-to-End Use-Case-Steuerung','Fachbereich-IT-Governance-Abstimmung','Learnings transferieren','Skalierungsentscheidungen strukturieren'],
    questions:[
      'Es gibt eine zentrale Rolle zur Steuerung der KI-Transformation.',
-     'KI-Use Cases werden systematisch gesteuert (End-to-End).',
+     'KI-Use Cases werden systematisch gesteuert.',
      'Fachbereiche, IT und Governance arbeiten abgestimmt zusammen.',
      'Learnings aus Use Cases werden organisationsweit genutzt.',
      'Skalierungsentscheidungen werden strukturiert getroffen.'
    ]},
   {id:'E', name:'Daten & Prozesse',
-   desc:'Datenverf\u00fcgbarkeit, Datenqualit\u00e4t, Integration von KI in Kernprozesse und messbarer Business Impact.',
-   oe:['Datenqualit\u00e4t sicherstellen','KI in Kernprozesse integrieren','Datenverantwortlichkeiten kl\u00e4ren','Use Cases skalieren','Business Impact messen'],
+   desc:'Der letzte Abschnitt fokussiert sich auf die Verfügbarkeit und Qualität von Daten für KI-Anwendungen sowie deren Integration in Geschäftsprozesse. Zudem werden die Regelungen zu Datenverantwortlichkeiten und die Nutzung von KI zur Prozessverbesserung betrachtet.',
+   oe:['Datenqualität sicherstellen','KI in Kernprozesse integrieren','Datenverantwortlichkeiten klären','Use Cases skalieren','Business Impact messen'],
    questions:[
-     'Datenqualit\u00e4t und -verf\u00fcgbarkeit sind sichergestellt.',
-     'KI ist in zentrale Kernprozesse integriert.',
+     'Datenqualität und -verfügbarkeit sind sichergestellt.',
+     'KI ist in zentrale Geschäftsprozesse integriert.',
      'Es existieren klare Datenverantwortlichkeiten.',
      'Erfolgreiche Use Cases werden skaliert.',
      'KI erzeugt messbaren Business Impact.'
@@ -346,10 +346,10 @@ const dimensions = [
 ];
 
 const stages = [
-  {min:1.0, max:1.9, level:1, name:'Initial',    sub:'Vereinzelte Aktivit\u00e4ten',  color:'#e24b4a'},
+  {min:1.0, max:1.9, level:1, name:'Initial',    sub:'Vereinzelte Aktivitäten',  color:'#e24b4a'},
   {min:2.0, max:2.6, level:2, name:'Bewusst',    sub:'Erste Strukturen entstehen', color:'#ef9f27'},
   {min:2.7, max:3.4, level:3, name:'Definiert',  sub:'Systematisches Vorgehen',    color:'#3266ad'},
-  {min:3.5, max:4.2, level:4, name:'Integriert', sub:'Skalierung l\u00e4uft',        color:'#1d9e75'},
+  {min:3.5, max:4.2, level:4, name:'Integriert', sub:'Skalierung läuft',        color:'#1d9e75'},
   {min:4.3, max:5.0, level:5, name:'Optimiert',  sub:'KI-native Organisation',     color:'#534ab7'}
 ];
 
@@ -367,11 +367,7 @@ function showResetModal() {
   modal.style.display = 'flex';
   setTimeout(function() { document.getElementById('reset-password').focus(); }, 100);
 }
-
-function hideResetModal() {
-  document.getElementById('reset-modal').style.display = 'none';
-}
-
+function hideResetModal() { document.getElementById('reset-modal').style.display = 'none'; }
 async function checkResetPassword() {
   const pw = document.getElementById('reset-password').value;
   if (pw !== ADMIN_PW) {
@@ -381,13 +377,8 @@ async function checkResetPassword() {
     return;
   }
   hideResetModal();
-  try {
-    await window._fbReset();
-    alert('Alle Daten wurden gel\u00f6scht.');
-    loadDashboard();
-  } catch(e) {
-    alert('Fehler: ' + e.message);
-  }
+  try { await window._fbReset(); alert('Alle Daten wurden gelöscht.'); loadDashboard(); }
+  catch(e) { alert('Fehler: ' + e.message); }
 }
 
 function renderSection(di) {
@@ -399,7 +390,7 @@ function renderSection(di) {
     qOff++;
     html += '<div class="question"><div class="question-text"><span class="question-num">' + qOff + '.</span>' + q + '</div><div class="rating-row">';
     [1,2,3,4,5].forEach(function(n) { html += '<button class="rating-btn' + (v===n?' active':'') + '" onclick="setAnswer(' + di + ',' + qi + ',' + n + ')">' + n + '</button>'; });
-    html += '<button class="rating-btn wn' + (v==='W'?' active':'') + '" onclick="setAnswer(' + di + ',' + qi + ',\'W\')">Wei\u00df nicht</button>';
+    html += '<button class="rating-btn wn' + (v==='W'?' active':'') + '" onclick="setAnswer(' + di + ',' + qi + ',\'W\')">Weiß nicht</button>';
     html += '</div><div class="scale-hint"><span>trifft nicht zu</span><span>trifft voll zu</span></div></div>';
   });
   return html + '</div>';
@@ -412,7 +403,7 @@ function updateUI() {
   document.getElementById('btn-prev').disabled = currentDim === 0;
   const ans = dimensions[currentDim].questions.filter(function(_, qi) { return answers[key(currentDim, qi)] !== undefined; }).length;
   document.getElementById('comp-badge').innerHTML = '<strong>' + ans + '</strong>/5 beantwortet';
-  document.getElementById('btn-next').textContent = currentDim === 4 ? 'Absenden \u2713' : 'Weiter \u2192';
+  document.getElementById('btn-next').textContent = currentDim === 4 ? 'Absenden ✓' : 'Weiter →';
 }
 
 function setAnswer(di, qi, val) { answers[key(di, qi)] = val; updateUI(); }
@@ -435,13 +426,13 @@ async function submitAnswers() {
   const scores = dimensions.map(function(_, i) { return dimScore(i); });
   myScores = scores;
   const btn = document.getElementById('btn-next');
-  btn.textContent = 'Wird gespeichert\u2026'; btn.disabled = true;
+  btn.textContent = 'Wird gespeichert…'; btn.disabled = true;
   try {
     await window._fbSave({A:scores[0], B:scores[1], C:scores[2], D:scores[3], E:scores[4]});
     showScreen('screen-thanks');
   } catch(e) {
     alert('Fehler: ' + e.message);
-    btn.textContent = 'Absenden \u2713'; btn.disabled = false;
+    btn.textContent = 'Absenden ✓'; btn.disabled = false;
   }
 }
 
@@ -454,14 +445,14 @@ function showMyResults() {
   const totalAns = Object.values(answers).filter(function(v) { return v !== 'W'; }).length;
   const totalWN = Object.values(answers).filter(function(v) { return v === 'W'; }).length;
 
-  let html = '<div class="stage-card"><div class="stage-circle">' + stage.level + '</div><div class="stage-info"><h3>Stufe ' + stage.level + ': ' + stage.name + '</h3><p>' + stage.sub + ' \u00b7 Score: ' + total.toFixed(2) + ' / 5,00</p></div><div class="stage-total">' + total.toFixed(1) + '</div></div>';
-  html += '<div class="metrics-grid"><div class="metric-card"><div class="metric-label">Gesamtscore</div><div class="metric-value">' + total.toFixed(2) + '</div></div><div class="metric-card"><div class="metric-label">Reifegrad</div><div class="metric-value">Stufe ' + stage.level + '</div></div><div class="metric-card"><div class="metric-label">Beantwortet</div><div class="metric-value">' + totalAns + '</div></div><div class="metric-card"><div class="metric-label">Wei\u00df nicht</div><div class="metric-value">' + totalWN + '</div></div></div>';
+  let html = '<div class="stage-card"><div class="stage-circle">' + stage.level + '</div><div class="stage-info"><h3>Stufe ' + stage.level + ': ' + stage.name + '</h3><p>' + stage.sub + ' · Score: ' + total.toFixed(2) + ' / 5,00</p></div><div class="stage-total">' + total.toFixed(1) + '</div></div>';
+  html += '<div class="metrics-grid"><div class="metric-card"><div class="metric-label">Gesamtscore</div><div class="metric-value">' + total.toFixed(2) + '</div></div><div class="metric-card"><div class="metric-label">Reifegrad</div><div class="metric-value">Stufe ' + stage.level + '</div></div><div class="metric-card"><div class="metric-label">Beantwortet</div><div class="metric-value">' + totalAns + '</div></div><div class="metric-card"><div class="metric-label">Weiß nicht</div><div class="metric-value">' + totalWN + '</div></div></div>';
   html += '<p class="section-heading">Scores nach Dimension</p><div class="legend">';
   stages.forEach(function(s) { html += '<span class="legend-item"><span class="legend-dot" style="background:' + s.color + '"></span>Stufe ' + s.level + ': ' + s.name + '</span>'; });
   html += '</div><div class="dim-list">';
   dimensions.forEach(function(d, i) {
     const sc = scores[i], str = sc !== null ? sc.toFixed(2) : 'n/a', pct = sc !== null ? ((sc-1)/4*100) : 0, col = sc !== null ? barColor(sc) : '#888', st = sc !== null ? getStage(sc) : null;
-    html += '<div class="dim-row"><div class="dim-header"><div class="dim-name">' + d.id + '. ' + d.name + '</div><span class="dim-badge" style="background:' + col + '22;color:' + col + '">' + str + (st ? ' \u00b7 Stufe ' + st.level : '') + '</span></div><div class="dim-bar-bg"><div class="dim-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div></div>';
+    html += '<div class="dim-row"><div class="dim-header"><div class="dim-name">' + d.id + '. ' + d.name + '</div><span class="dim-badge" style="background:' + col + '22;color:' + col + '">' + str + (st ? ' · Stufe ' + st.level : '') + '</span></div><div class="dim-bar-bg"><div class="dim-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div></div>';
   });
   html += '</div>';
   document.getElementById('myresult-content').innerHTML = html;
@@ -469,7 +460,7 @@ function showMyResults() {
 }
 
 async function loadDashboard() {
-  document.getElementById('dash-metrics').innerHTML = '<div class="loading-box">Daten werden geladen\u2026</div>';
+  document.getElementById('dash-metrics').innerHTML = '<div class="loading-box">Daten werden geladen…</div>';
   document.getElementById('dash-bars').innerHTML = '';
   document.getElementById('dash-details').innerHTML = '';
   let allData;
@@ -486,27 +477,27 @@ async function loadDashboard() {
   const totalMean = validMeans.reduce(function(a, b) { return a + b; }, 0) / validMeans.length;
   const totalStage = getStage(totalMean);
 
-  document.getElementById('dash-metrics').innerHTML = '<div class="metric-card"><div class="metric-label">Teilnehmer</div><div class="metric-value">' + count + '</div></div><div class="metric-card"><div class="metric-label">\u00d8 Gesamtscore</div><div class="metric-value">' + totalMean.toFixed(2) + '</div></div><div class="metric-card"><div class="metric-label">Reifegrad</div><div class="metric-value">Stufe ' + totalStage.level + '</div></div><div class="metric-card"><div class="metric-label">Stufe</div><div class="metric-value">' + totalStage.name + '</div></div>';
+  document.getElementById('dash-metrics').innerHTML = '<div class="metric-card"><div class="metric-label">Teilnehmer</div><div class="metric-value">' + count + '</div></div><div class="metric-card"><div class="metric-label">Ø Gesamtscore</div><div class="metric-value">' + totalMean.toFixed(2) + '</div></div><div class="metric-card"><div class="metric-label">Reifegrad</div><div class="metric-value">Stufe ' + totalStage.level + '</div></div><div class="metric-card"><div class="metric-label">Stufe</div><div class="metric-value">' + totalStage.name + '</div></div>';
 
-  let barsHtml = '<p class="section-heading" style="margin-bottom:1rem">\u00d8 Score nach Dimension</p>';
+  let barsHtml = '<p class="section-heading" style="margin-bottom:1rem">Ø Score nach Dimension</p>';
   dimensions.forEach(function(d, i) {
     const sc = means[i], pct = sc ? ((sc-1)/4*100) : 0, col = sc ? barColor(sc) : '#888', st = sc ? getStage(sc) : null;
-    barsHtml += '<div class="compare-row"><div class="compare-label" style="color:' + col + ';font-weight:600">' + d.id + '</div><div class="compare-name">' + d.name + '</div><div class="compare-bar-bg"><div class="compare-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div><div class="compare-score" style="color:' + col + '">' + (sc ? sc.toFixed(2) : '\u2013') + (st ? ' (' + st.level + ')' : '') + '</div></div>';
+    barsHtml += '<div class="compare-row"><div class="compare-label" style="color:' + col + ';font-weight:600">' + d.id + '</div><div class="compare-name">' + d.name + '</div><div class="compare-bar-bg"><div class="compare-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div><div class="compare-score" style="color:' + col + '">' + (sc ? sc.toFixed(2) : '–') + (st ? ' (' + st.level + ')' : '') + '</div></div>';
   });
   document.getElementById('dash-bars').innerHTML = barsHtml;
 
   if (dashChart) { dashChart.destroy(); dashChart = null; }
   dashChart = new Chart(document.getElementById('dashRadar'), {
     type: 'radar',
-    data: { labels: dimensions.map(function(d) { return d.name; }), datasets: [{ label: '\u00d8 Gruppe', data: means.map(function(v) { return parseFloat(v.toFixed(2)); }), backgroundColor: 'rgba(232,90,0,0.1)', borderColor: '#e85a00', borderWidth: 2, pointBackgroundColor: '#e85a00', pointRadius: 5 }] },
+    data: { labels: dimensions.map(function(d) { return d.name; }), datasets: [{ label: 'Ø Gruppe', data: means.map(function(v) { return parseFloat(v.toFixed(2)); }), backgroundColor: 'rgba(232,90,0,0.1)', borderColor: '#e85a00', borderWidth: 2, pointBackgroundColor: '#e85a00', pointRadius: 5 }] },
     options: { responsive: true, maintainAspectRatio: false, scales: { r: { min: 0, max: 5, ticks: { stepSize: 1, font: { size: 11 }, color: '#888' }, pointLabels: { font: { size: 12 } }, grid: { color: 'rgba(128,128,128,0.18)' }, angleLines: { color: 'rgba(128,128,128,0.18)' } } }, plugins: { legend: { display: false } } }
   });
 
   const low = dimensions.map(function(d, i) { return { d: d, sc: means[i] }; }).filter(function(x) { return x.sc > 0 && x.sc < 3.5; }).sort(function(a, b) { return a.sc - b.sc; }).slice(0, 3);
-  let detailHtml = '<div class="metrics-grid" style="margin-bottom:1.5rem"><div class="metric-card"><div class="metric-label">St\u00e4rkste Dim.</div><div class="metric-value">' + dimensions[means.indexOf(Math.max.apply(null, means))].id + '</div></div><div class="metric-card"><div class="metric-label">Schw\u00e4chste Dim.</div><div class="metric-value">' + dimensions[means.indexOf(Math.min.apply(null, means.filter(function(v) { return v > 0; })))].id + '</div></div><div class="metric-card"><div class="metric-label">\u00d8 Score</div><div class="metric-value">' + totalMean.toFixed(2) + '</div></div><div class="metric-card"><div class="metric-label">Reifegrad</div><div class="metric-value">Stufe ' + totalStage.level + '</div></div></div>';
+  let detailHtml = '<div class="metrics-grid" style="margin-bottom:1.5rem"><div class="metric-card"><div class="metric-label">Stärkste Dim.</div><div class="metric-value">' + dimensions[means.indexOf(Math.max.apply(null, means))].id + '</div></div><div class="metric-card"><div class="metric-label">Schwächste Dim.</div><div class="metric-value">' + dimensions[means.indexOf(Math.min.apply(null, means.filter(function(v) { return v > 0; })))].id + '</div></div><div class="metric-card"><div class="metric-label">Ø Score</div><div class="metric-value">' + totalMean.toFixed(2) + '</div></div><div class="metric-card"><div class="metric-label">Reifegrad</div><div class="metric-value">Stufe ' + totalStage.level + '</div></div></div>';
   if (low.length) {
-    detailHtml += '<p class="section-heading">Empfohlene Ma\u00dfnahmen (schw\u00e4chste Dimensionen)</p>';
-    low.forEach(function(x) { detailHtml += '<div class="oe-block"><div class="oe-block-title">' + x.d.name + ' <span style="font-weight:400;color:var(--text-secondary)">\u2014 \u00d8 ' + x.sc.toFixed(2) + '</span></div><div class="tags">' + x.d.oe.map(function(h) { return '<span class="tag">' + h + '</span>'; }).join('') + '</div></div>'; });
+    detailHtml += '<p class="section-heading">Empfohlene Maßnahmen (schwächste Dimensionen)</p>';
+    low.forEach(function(x) { detailHtml += '<div class="oe-block"><div class="oe-block-title">' + x.d.name + ' <span style="font-weight:400;color:var(--text-secondary)">— Ø ' + x.sc.toFixed(2) + '</span></div><div class="tags">' + x.d.oe.map(function(h) { return '<span class="tag">' + h + '</span>'; }).join('') + '</div></div>'; });
   }
   document.getElementById('dash-details').innerHTML = detailHtml;
 }
